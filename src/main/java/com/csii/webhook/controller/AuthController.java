@@ -61,11 +61,11 @@ public class AuthController {
         String code = request.getParameter("code");
         String redirect_uri = request.getParameter("redirect_uri");
 
-        System.out.println("client_id------------"+client_id);
-        System.out.println("grant_type-----------"+grant_type);
-        System.out.println("client_secret------------"+client_secret);
-        System.out.println("code---------------"+code);
-        System.out.println("redirect_uri-----------------"+redirect_uri);
+        System.out.println("client_id\t"+client_id);
+        System.out.println("grant_type\t"+grant_type);
+        System.out.println("client_secret\t"+client_secret);
+        System.out.println("code\t"+code);
+        System.out.println("redirect_uri\t"+redirect_uri);
 
         Map<String, Object> map = new HashMap<>();
         map.put("access_token", code);
