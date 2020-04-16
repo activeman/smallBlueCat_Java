@@ -25,7 +25,7 @@ public class RequestController {
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
     // @RequestMapping(value = "/hello", method = RequestMethod.POST)//应用时用
-    @RequestMapping(value = "/hello")//浏览器测试用
+    @RequestMapping("/hello")//浏览器测试用
     @ResponseBody//结果转json用
     public  ResultModel<TaskResult> getResponse( String taskQuery) {
         // @RequestBody
