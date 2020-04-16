@@ -56,7 +56,8 @@ public class JWT_Test {
                 .withClaim("loginName", username)//设置自定义字段
                 .withClaim("userId", userId)
                 .withSubject("ls")
-                .withExpiresAt(date).sign(algorithm);//设置加密字段
+                .withExpiresAt(date)
+                .sign(algorithm);//设置加密字段
 
         return token;
     }
