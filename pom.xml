@@ -75,6 +75,14 @@
             <artifactId>gson</artifactId>
             <version>2.8.5</version>
         </dependency>
+        <!--引入本地lib里的jar包-->
+        <dependency>
+            <groupId>aligenie</groupId>
+            <artifactId>aligenie</artifactId>
+            <version>1.0</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/aliGenie-intent-sematic.jar</systemPath>
+        </dependency>
 
     </dependencies>
 
