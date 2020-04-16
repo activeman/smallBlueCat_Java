@@ -6,11 +6,8 @@ import com.alibaba.da.coin.ide.spi.standard.ResultModel;
 import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
 import com.alibaba.da.coin.ide.spi.trans.MetaFormat;
-
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -27,14 +24,18 @@ public class RequestController {
     /**
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
-    @RequestMapping(value = "/financial", method = RequestMethod.POST)
-    public @ResponseBody ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
-
+    // @RequestMapping(value = "/hello", method = RequestMethod.POST)//应用时用
+    @RequestMapping(value = "/hello")//浏览器测试用
+    @ResponseBody//结果转json用
+    public  ResultModel<TaskResult> getResponse( String taskQuery) {
+        // @RequestBody
         /**
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
-
+        System.out.println();
+        System.out.println(query);
+        System.out.println();
         /**
          * 构建服务返回结果
          */
@@ -51,6 +52,7 @@ public class RequestController {
             TaskResult result = new TaskResult();
             result.setReply("回复的播报语句");
             result.setResultType(ResultType.RESULT);
+            // result.setResultType(ResultType.ASK_INF);
             result.setProperties(extraMessages);
             result.setAskedInfos(askInfo);
             result.setActions(actions);
@@ -69,7 +71,23 @@ public class RequestController {
         return resultModel;
     }
 
+    @RequestMapping("/c")
+    @ResponseBody
+    public Map<String, Object> consent(String code) {
+        System.out.println("---consent---");
+        System.out.println();
+        System.out.println(code);
+        System.out.println();
+        Map<String, Object> map = new HashMap<>();
+        map.put("access_token", code);
+        map.put("refresh_token", "refresh123456789");
+        map.put("expires_in", 17600000);
+        return map;
+    }
+
 }
+
+
 
 // 天气服务执行，根据NLU理解的结果做相应处理并返回回复语句
 /*@Component

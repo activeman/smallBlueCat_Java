@@ -1,4 +1,4 @@
-package com.csii.webhook.pojo;
+package com.csii.webhook.model.pojo;
 
 public class Users {
 	public Users(){}
