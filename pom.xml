@@ -76,6 +76,12 @@
             <version>2.8.5</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.alibaba</groupId>
+            <artifactId>aliGenie-intent-sematic</artifactId>
+            <version>1.0</version>
+        </dependency>
+
     </dependencies>
 
     <build>
