@@ -1,75 +1,55 @@
 package com.csii.webhook.controller;
 
-import com.alibaba.da.coin.ide.spi.meta.ExecuteCode;
 import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.alibaba.da.coin.ide.spi.standard.ResultModel;
 import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
 import com.alibaba.da.coin.ide.spi.trans.MetaFormat;
+import com.csii.webhook.service.CommunictionService;
+import com.csii.webhook.service.UsersService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
  * @author 571002868
  */
 @Controller
-public class RequestController {
+public class BohaiController {
+    @Autowired
+    UsersService usersService;
+    CommunictionService printQuery;
+    CommunictionService responseTaskResult;
 
     /**
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
     @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
-    // @RequestMapping("/helloxxxx")//浏览器测试用
-    @ResponseBody//结果转json用
-    public  ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
+    //     @RequestMapping("/helloxxxx")//浏览器测试用
+    @ResponseBody
+    //结果转json用
+    public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
         /**
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
+
+        //msg是对应的语义转换成TaskQuery后的值
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
-        System.out.println();
-        System.out.println(query);
-        System.out.println();
+//        System.out.println();
+//        System.out.println(query);
+//        System.out.println();
+        String msg = printQuery.printQuery(MetaFormat.parseToQuery(taskQuery));
+        //写一个打印对象的方法，给自己看，
         /**
          * 构建服务返回结果
          */
-        ResultModel<TaskResult> resultModel = new ResultModel<TaskResult>();
-        try {
-            //回复语句携带的额外信息，map形式
-            Map<String, String> extraMessages = new HashMap<>(16);
-            extraMessages.put("额外信息", "manual extral message");
-            //追问参数名，list形式
-            List askInfo = new ArrayList();
-            //播控类音频信息，list形式
-            List actions = new ArrayList();
-            //意图理解后的执行结果对象
-            TaskResult result = new TaskResult();
-            // result.setReply("回复的播报语句");
-            result.setReply(query.getUtterance());
-            result.setResultType(ResultType.RESULT);
-            // result.setResultType(ResultType.ASK_INF);
-            result.setProperties(extraMessages);
-            result.setAskedInfos(askInfo);
-            result.setActions(actions);
-            result.setExecuteCode(ExecuteCode.SUCCESS);
-            //返回对象
-            resultModel.setReturnCode("0");
-            resultModel.setReturnErrorSolution("出错时的描述信息");
-            resultModel.setReturnMessage("执行成功的描述信息");
-            resultModel.setReturnValue(result);
-        } catch (Exception e) {
-            resultModel.setReturnCode("-1");
-            resultModel.setReturnErrorSolution(e.getMessage());
-        }
-
-        System.out.println(resultModel);
+        ResultModel<TaskResult> resultModel = responseTaskResult.responseTaskResult(msg, ResultType.RESULT);
         return resultModel;
     }
 
@@ -86,9 +66,7 @@ public class RequestController {
         map.put("expires_in", 17600000);
         return map;
     }
-
 }
-
 
 
 // 天气服务执行，根据NLU理解的结果做相应处理并返回回复语句

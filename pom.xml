@@ -86,9 +86,10 @@
 
         <dependency>
             <groupId>com.alibaba</groupId>
-            <artifactId>aliGenie-intent-sematic</artifactId>
-            <version>1.0</version>
+            <artifactId>fastjson</artifactId>
+            <version>1.2.51</version>
         </dependency>
+
 
     </dependencies>
 
