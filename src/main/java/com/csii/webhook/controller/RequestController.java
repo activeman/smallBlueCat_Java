@@ -7,7 +7,9 @@ import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
 import com.alibaba.da.coin.ide.spi.trans.MetaFormat;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
@@ -24,11 +26,10 @@ public class RequestController {
     /**
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
-    // @RequestMapping(value = "/hello", method = RequestMethod.POST)//应用时用
-    @RequestMapping("/hello")//浏览器测试用
+    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
+    // @RequestMapping("/helloxxxx")//浏览器测试用
     @ResponseBody//结果转json用
-    public  ResultModel<TaskResult> getResponse( String taskQuery) {
-        // @RequestBody
+    public  ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
         /**
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
@@ -50,7 +51,8 @@ public class RequestController {
             List actions = new ArrayList();
             //意图理解后的执行结果对象
             TaskResult result = new TaskResult();
-            result.setReply("回复的播报语句");
+            // result.setReply("回复的播报语句");
+            result.setReply(query.getUtterance());
             result.setResultType(ResultType.RESULT);
             // result.setResultType(ResultType.ASK_INF);
             result.setProperties(extraMessages);
