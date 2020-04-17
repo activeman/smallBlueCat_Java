@@ -1,5 +1,7 @@
 package com.csii.webhook.controller;
 
+import com.csii.webhook.service.AuthService;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,10 +16,18 @@ import java.util.Map;
 @Controller
 public class AuthController {
 
+    @Autowired
+    private AuthService authService;
+
     /**
     * 跳转登录页面
     *
     */
+
+    /**
+     * token私钥
+     */
+
     @RequestMapping("/auth")
     public String auth(String redirect_uri, String client_id, String response_type, String state, Model model){
 
@@ -37,10 +47,12 @@ public class AuthController {
     }
 
     @RequestMapping("/login")
+
    public String login(String login, String password, String url, String state, Model model)  {
 
-       if (login.equals("csii")  && password.equals("123456") ){
-           String newUrl = url + "&code=" + login + "&state=" + state;
+       if (login.equals("csii") && password.equals("123456") ){
+           String token = authService.sign("csii");
+           String newUrl = url + "&code=" + token + "&state=" + state;
            return "redirect:" + newUrl;
        }else{
            model.addAttribute("url",url);
@@ -54,6 +66,7 @@ public class AuthController {
     @RequestMapping("/consent")
     @ResponseBody
     public Map<String, Object> consent(HttpServletRequest request) {
+
 
         String client_id = request.getParameter("client_id");
         String grant_type = request.getParameter("grant_type");
@@ -73,5 +86,4 @@ public class AuthController {
         map.put("expires_in", 17600000);
         return map;
     }
-
 }
