@@ -7,11 +7,14 @@ import com.alibaba.da.coin.ide.spi.standard.TaskResult;
 import com.alibaba.da.coin.ide.spi.trans.MetaFormat;
 import com.csii.webhook.service.CommunictionService;
 import com.csii.webhook.service.UsersService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -30,8 +33,8 @@ public class BohaiController {
     /**
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
-    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
-    //     @RequestMapping("/helloxxxx")//浏览器测试用
+//    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
+    @RequestMapping("/helloxxxx")//浏览器测试用
     @ResponseBody
     //结果转json用
     public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
@@ -39,17 +42,16 @@ public class BohaiController {
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
 
-        //msg是对应的语义转换成TaskQuery后的值
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
 //        System.out.println();
 //        System.out.println(query);
 //        System.out.println();
-        String msg = printQuery.printQuery(MetaFormat.parseToQuery(taskQuery));
+        printQuery.printQuery(MetaFormat.parseToQuery(taskQuery));
         //写一个打印对象的方法，给自己看，
         /**
          * 构建服务返回结果
          */
-        ResultModel<TaskResult> resultModel = responseTaskResult.responseTaskResult(msg, ResultType.RESULT);
+        ResultModel<TaskResult> resultModel = responseTaskResult.responseTaskResult("请输入一句话", ResultType.RESULT);
         return resultModel;
     }
 
@@ -66,6 +68,24 @@ public class BohaiController {
         map.put("expires_in", 17600000);
         return map;
     }
+
+//    json格式化测试
+    @RequestMapping("/t")
+    @ResponseBody
+    public void test() {
+        String jsonString = "{\"_index\":\"book_shop\",\"_type\":\"it_book\",\"_id\":\"1\",\"_score\":1.0," +
+                "\"_source\":{\"name\": \"Java编程思想（第4版）\",\"author\": \"[美] Bruce Eckel\",\"category\": \"编程语言\"," +
+                "\"price\": 109.0,\"publisher\": \"机械工业出版社\",\"date\": \"2007-06-01\",\"tags\": [ \"Java\", \"编程语言\" ]}}";
+        String pretty = toPrettyFormat(jsonString);
+        System.out.println(pretty);
+    }
+    private static String toPrettyFormat(String json) {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(jsonObject);
+    }
+
 }
 
 
