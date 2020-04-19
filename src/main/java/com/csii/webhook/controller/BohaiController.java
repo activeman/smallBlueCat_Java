@@ -11,7 +11,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -24,33 +23,25 @@ import java.util.Map;
 public class BohaiController {
     @Autowired
     UsersService usersService;
-    CommunictionService printQuery;
-    CommunictionService responseTaskResult;
+    CommunictionService communictionService;
 
     /**
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
-    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
-    //     @RequestMapping("/helloxxxx")//浏览器测试用
+//    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
+    @RequestMapping("/helloxxxx")//浏览器测试用
     @ResponseBody
     //结果转json用
     public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
         /**
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
-
-        //msg是对应的语义转换成TaskQuery后的值
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
-//        System.out.println();
-//        System.out.println(query);
-//        System.out.println();
-        String msg = printQuery.printQuery(MetaFormat.parseToQuery(taskQuery));
-        //写一个打印对象的方法，给自己看，
+        communictionService.printQuery(query);
         /**
          * 构建服务返回结果
          */
-        ResultModel<TaskResult> resultModel = responseTaskResult.responseTaskResult(msg, ResultType.RESULT);
-        return resultModel;
+        return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
     }
 
     @RequestMapping("/c")
@@ -66,6 +57,8 @@ public class BohaiController {
         map.put("expires_in", 17600000);
         return map;
     }
+
+
 }
 
 

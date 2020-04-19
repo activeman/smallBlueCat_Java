@@ -5,8 +5,12 @@ import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.alibaba.da.coin.ide.spi.standard.ResultModel;
 import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.csii.webhook.service.CommunictionService;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -14,11 +18,10 @@ import java.util.Map;
 
 public class CommunictionServiceImpl implements CommunictionService {
     @Override
-    public String printQuery(TaskQuery query) {
-        Object obj = JSONArray.toJSON(query);
+    public void printQuery(TaskQuery query) {
+        Object obj = JSONObject.toJSONString(query);
         String json = obj.toString();
-        System.out.println(json);
-        return json;
+        System.out.println(toPrettyFormat(json));
     }
 
     @Override
@@ -52,6 +55,15 @@ public class CommunictionServiceImpl implements CommunictionService {
         }
         System.out.println(resultModel);
         return resultModel;
+    }
+
+
+//    json格式化
+    private static String toPrettyFormat(String json) {
+        JsonParser jsonParser = new JsonParser();
+        JsonObject jsonObject = jsonParser.parse(json).getAsJsonObject();
+        Gson gson = new GsonBuilder().setPrettyPrinting().create();
+        return gson.toJson(jsonObject);
     }
 
 }

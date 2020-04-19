@@ -7,6 +7,6 @@ import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
 
 public interface CommunictionService {
-    String printQuery(TaskQuery query);
+    void printQuery(TaskQuery query);
     ResultModel<TaskResult>  responseTaskResult(String msg, ResultType resultType);
 }

@@ -57,13 +57,6 @@
         </dependency>
 
 
-        <!--       json-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
-        </dependency>
-
         <!-- Aligenie SDK 依赖      -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -84,6 +77,7 @@
             <systemPath>${project.basedir}/lib/aliGenie-intent-sematic.jar</systemPath>
         </dependency>
 
+
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
@@ -101,7 +95,6 @@
             <artifactId>mybatis-spring-boot-starter</artifactId>
             <version>2.1.1</version>
         </dependency>
-
 
     </dependencies>
 
