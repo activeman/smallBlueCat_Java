@@ -2,14 +2,33 @@ package com.csii.webhook.model.pojo;
 
 public class Users {
 	public Users(){}
-	public Users(Integer id, String name, Integer age){
+
+	public Users(Integer id, String name, Integer age, String login, String password){
 		this.id = id;
 		this.name = name;
 		this.age = age;
+		this.login = login;
+		this.password = password;
+
 	}
 	private Integer id;
 	private String name;
 	private Integer  age;
+	private String login;
+	private String password;
+
+	public void setLogin(String login) {
+		this.login = login;
+	}
+	public String getLogin() {
+		return login;
+	}
+	public String getPassword() {
+		return password;
+	}
+	public void setPassword(String password) {
+		this.password = password;
+	}
 	public Integer getId() {
 		return id;
 	}
@@ -35,6 +54,8 @@ public class Users {
 				"id=" + id +
 				", name='" + name + '\'' +
 				", age=" + age +
+				", login"+login +
+				", password"+ password+
 				'}';
 	}
 }

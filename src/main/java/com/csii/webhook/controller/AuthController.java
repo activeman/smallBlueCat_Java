@@ -1,6 +1,9 @@
 package com.csii.webhook.controller;
 
+import com.csii.webhook.dao.userdao;
+import com.csii.webhook.model.pojo.Users;
 import com.csii.webhook.service.AuthService;
+import com.csii.webhook.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,9 +18,6 @@ import java.util.Map;
  */
 @Controller
 public class AuthController {
-
-    @Autowired
-    private AuthService authService;
 
     /**
     * 跳转登录页面
@@ -46,21 +46,29 @@ public class AuthController {
 
     }
 
+
+
+    @Autowired
+    private LoginService loginService;
     @RequestMapping("/login")
-
-   public String login(String login, String password, String url, String state, Model model)  {
-
-       if (login.equals("csii") && password.equals("123456") ){
-           String token = authService.sign("csii");
-           String newUrl = url + "&code=" + token + "&state=" + state;
-           return "redirect:" + newUrl;
-       }else{
-           model.addAttribute("url",url);
-           model.addAttribute("state",state);
-           return "login";
-       }
-
+    public String login(String login, String password, String url, String state, Model model){
+        return loginService.login(login,password,url,state,model);
     }
+//    private userdao dao;
+//    @RequestMapping("/login")
+//   public String login(String login, String password, String url, String state, Model model)  {
+//        Users user = dao.userdao();
+//       if (login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
+//           String token = authService.sign("csii");
+//           String newUrl = url + "&code=" + token + "&state=" + state;
+//           return "redirect:" + newUrl;
+//       }else{
+//           model.addAttribute("url",url);
+//           model.addAttribute("state",state);
+//           return "login";
+//       }
+//
+//    }
 
 
     @RequestMapping("/consent")
