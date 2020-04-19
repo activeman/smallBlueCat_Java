@@ -57,13 +57,6 @@
         </dependency>
 
 
-        <!--       json-->
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.47</version>
-        </dependency>
-
         <!-- Aligenie SDK 依赖      -->
         <dependency>
             <groupId>com.google.guava</groupId>
@@ -84,16 +77,11 @@
             <systemPath>${project.basedir}/lib/aliGenie-intent-sematic.jar</systemPath>
         </dependency>
 
-        <dependency>
-            <groupId>com.alibaba</groupId>
-            <artifactId>fastjson</artifactId>
-            <version>1.2.51</version>
-        </dependency>
 
         <dependency>
             <groupId>com.alibaba</groupId>
             <artifactId>fastjson</artifactId>
-            <version>1.2.58</version>
+            <version>1.2.51</version>
         </dependency>
 
     </dependencies>

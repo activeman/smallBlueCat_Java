@@ -5,7 +5,7 @@ import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.alibaba.da.coin.ide.spi.standard.ResultModel;
 import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
-import com.alibaba.fastjson.JSONArray;
+import com.alibaba.fastjson.JSONObject;
 import com.csii.webhook.service.CommunictionService;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -19,7 +19,7 @@ import java.util.Map;
 public class CommunictionServiceImpl implements CommunictionService {
     @Override
     public void printQuery(TaskQuery query) {
-        Object obj = JSONArray.toJSON(query);
+        Object obj = JSONObject.toJSONString(query);
         String json = obj.toString();
         System.out.println(toPrettyFormat(json));
     }
