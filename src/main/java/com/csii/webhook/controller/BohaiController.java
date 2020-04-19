@@ -23,7 +23,7 @@ import java.util.Map;
 public class BohaiController {
     @Autowired
     UsersService usersService;
-    CommunictionService printQuery,responseTaskResult;
+    CommunictionService communictionService;
 
     /**
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
@@ -37,11 +37,11 @@ public class BohaiController {
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
-        printQuery.printQuery(query);
+        communictionService.printQuery(query);
         /**
          * 构建服务返回结果
          */
-        return responseTaskResult.responseTaskResult("请输入一句话", ResultType.RESULT);
+        return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
     }
 
     @RequestMapping("/c")
