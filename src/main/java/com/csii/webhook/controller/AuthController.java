@@ -1,7 +1,5 @@
 package com.csii.webhook.controller;
 
-import com.csii.webhook.dao.userdao;
-import com.csii.webhook.model.pojo.Users;
 import com.csii.webhook.service.AuthService;
 import com.csii.webhook.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -49,15 +47,17 @@ public class AuthController {
 
 
     @Autowired
+    private AuthService authService;
     private LoginService loginService;
     @RequestMapping("/login")
     public String login(String login, String password, String url, String state, Model model){
-        return loginService.login(login,password,url,state,model);
+        String token = authService.sign("csii");
+        return loginService.login(login,password,url,state,model,token);
     }
-//    private userdao dao;
+//    private FindUsersDao dao;
 //    @RequestMapping("/login")
 //   public String login(String login, String password, String url, String state, Model model)  {
-//        Users user = dao.userdao();
+//        Users user = dao.FindUsersDao();
 //       if (login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
 //           String token = authService.sign("csii");
 //           String newUrl = url + "&code=" + token + "&state=" + state;

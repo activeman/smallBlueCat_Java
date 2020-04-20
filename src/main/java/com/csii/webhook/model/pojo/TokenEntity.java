@@ -10,8 +10,8 @@ public class TokenEntity {
     @Value("${token.secret}")
     private String secret;
 
-    @Value("${expire.time}")
-    private String time;
+//    @Value("${expire.time}")
+//    private String time;
 
     public String getSecret() {
         return secret;
@@ -21,13 +21,13 @@ public class TokenEntity {
         this.secret = secret;
     }
 
-    public String getTime() {
-        return time;
-    }
-
-    public void setTime(String time) {
-        this.time = time;
-    }
+//    public String getTime() {
+//        return time;
+//    }
+//
+//    public void setTime(String time) {
+//        this.time = time;
+//    }
 
 
 }

@@ -1,8 +1,7 @@
 package com.csii.webhook.service.impl;
 
-import com.csii.webhook.dao.userdao;
+import com.csii.webhook.dao.FindUsersDao;
 import com.csii.webhook.model.pojo.Users;
-import com.csii.webhook.service.AuthService;
 import com.csii.webhook.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -13,13 +12,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class LoginServiceImpl implements LoginService {
 
         @Autowired
-        private AuthService authService;
-        private userdao dao;
+        private FindUsersDao findUsers;
         @RequestMapping("/login")
-        public String login(String login, String password, String url, String state, Model model)  {
-            Users user = dao.userdao();
+        public String login(String login, String password, String url, String state, Model model,String token)  {
+            Users user = findUsers.findUsers();
+            //将 传入的login password 与数据库中的 作对比，匹配则登录成功
             if (login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
-                String token = authService.sign("csii");
                 String newUrl = url + "&code=" + token + "&state=" + state;
                 return "redirect:" + newUrl;
             }else{

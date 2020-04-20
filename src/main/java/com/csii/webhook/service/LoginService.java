@@ -6,6 +6,6 @@ import org.springframework.ui.Model;
 
 @Service
 public interface LoginService{
-    public String login(String login, String password, String url, String state, Model model);
+    public String login(String login, String password, String url, String state, Model model,String token);
         }
 

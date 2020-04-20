@@ -19,8 +19,8 @@ import java.util.Map;
 public class CommunictionServiceImpl implements CommunictionService {
     @Override
     public void printQuery(TaskQuery query) {
-        Object obj = JSONObject.toJSONString(query);
-        String json = obj.toString();
+
+        String json =  JSONObject.toJSONString(query);
         System.out.println(toPrettyFormat(json));
     }
 
