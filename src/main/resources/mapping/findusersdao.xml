@@ -8,8 +8,7 @@
 
     </resultMap>
 
-    <select id="userdao"  resultMap="TestMap">
-        select login,password from user1;
+    <select id="findUsers"  parameterType="java.lang.String" resultMap="TestMap">
+        select login,password from user1 where login =#{login} and password =#{password};
     </select>
-
 </mapper>
