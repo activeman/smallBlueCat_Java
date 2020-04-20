@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
@@ -52,7 +53,9 @@ public class AuthController {
     @RequestMapping("/login")
     public String login(String login, String password, String url, String state, Model model){
         String token = authService.sign("csii");
-        return loginService.login(login,password,url,state,model,token);
+        boolean bool = loginService.login(login,password);
+        String urlSplicing=loginService.urlSplicing(bool,url,state,token,model);
+        return urlSplicing;
     }
 //    private FindUsersDao dao;
 //    @RequestMapping("/login")
