@@ -5,10 +5,10 @@
     <resultMap id="TestMap" type="com.csii.webhook.model.pojo.Users">
         <result property="login" column="login"/>
         <result property="password" column="password"/>
-
+        <result property="id" column="id"/>
     </resultMap>
 
     <select id="findUsers"  parameterType="java.lang.String" resultMap="TestMap">
-        select login,password from user1 where login =#{login} and password =#{password};
+        select * from user1 where login =#{login} and password =#{password};
     </select>
 </mapper>

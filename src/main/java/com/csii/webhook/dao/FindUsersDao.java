@@ -8,5 +8,5 @@ import org.springframework.stereotype.Component;
 @Component
 @Mapper
 public interface FindUsersDao {
-    Users findUsers();
+    Users findUsers(String login,String password);
 }

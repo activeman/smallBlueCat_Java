@@ -46,9 +46,9 @@ public class AuthController {
     }
 
 
-
     @Autowired
     private AuthService authService;
+    @Autowired
     private LoginService loginService;
     @RequestMapping("/login")
     public String login(String login, String password, String url, String state, Model model){
@@ -57,11 +57,29 @@ public class AuthController {
         String urlSplicing=loginService.urlSplicing(bool,url,state,token,model);
         return urlSplicing;
     }
+
+//    @Autowired
+//    private AuthService authService;
+//    @Autowired
+//    private LoginService loginService;
+//    @RequestMapping("/login")
+//    @ResponseBody
+//    public Map<String, Object> login(String login, String password){
+//        String token = authService.sign("csii");
+//        Boolean bool = loginService.login(login,password);
+//
+////        String urlSplicing=loginService.urlSplicing(bool,url,state,token,model);
+//        Map<String, Object> map = new HashMap<>();
+//        map.put("access_token", "");
+//        map.put("refresh_token", "refresh123456789");
+//        map.put("expires_in", 17600000);
+//        return map;
+//    }
 //    private FindUsersDao dao;
 //    @RequestMapping("/login")
 //   public String login(String login, String password, String url, String state, Model model)  {
 //        Users user = dao.FindUsersDao();
-//       if (login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
+//       if (login.equals(user.getLogin()) && p,passwordassword.equals(user.getPassword()) ){
 //           String token = authService.sign("csii");
 //           String newUrl = url + "&code=" + token + "&state=" + state;
 //           return "redirect:" + newUrl;
@@ -77,7 +95,6 @@ public class AuthController {
     @RequestMapping("/consent")
     @ResponseBody
     public Map<String, Object> consent(HttpServletRequest request) {
-
 
         String client_id = request.getParameter("client_id");
         String grant_type = request.getParameter("grant_type");

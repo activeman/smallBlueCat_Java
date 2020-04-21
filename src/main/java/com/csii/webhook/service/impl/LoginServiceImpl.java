@@ -6,26 +6,42 @@ import com.csii.webhook.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.RequestMapping;
+
 
 @Service
 public class LoginServiceImpl implements LoginService {
 
     @Autowired
     private FindUsersDao findUsers;
-    @RequestMapping("/login")
-    public boolean login(String login, String password)  {
-        Users user = findUsers.findUsers();
-        //将 传入的login password 与数据库中的 作对比，匹配则登录成功
-        if (login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
+
+    @Override
+    public Boolean login(String login, String password)  {
+
+        Users user = findUsers.findUsers(login,password);
+
+        int id = 0;
+        try {
+            id =  user.getId();
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if(id==0){
+            System.out.println("查询失败");
+            return false;
+        }else if(login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
+            System.out.println(user);
+            System.out.println("查询成功");
             return true;
-        }else{
+        } else{
+            System.out.println("查询失败");
             return false;
         }
+
     }
 
 
     //    地址拼接
+    @Override
     public String urlSplicing(boolean t,String url, String state,String token, Model model)  {
         if (t==true){
             String newUrl = url + "&code=" + token + "&state=" + state;

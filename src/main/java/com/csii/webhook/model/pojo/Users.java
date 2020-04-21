@@ -1,7 +1,13 @@
 package com.csii.webhook.model.pojo;
 
 public class Users {
+
 	public Users(){}
+
+	public Users(String login, String password) {
+		this.login = login;
+		this.password = password;
+	}
 
 	public Users(Integer id, String name, Integer age, String login, String password){
 		this.id = id;
@@ -47,17 +53,17 @@ public class Users {
 	public void setAge(Integer age) {
 		this.age = age;
 	}
-
 	@Override
 	public String toString() {
 		return "Users{" +
 				"id=" + id +
 				", name='" + name + '\'' +
 				", age=" + age +
-				", login"+login +
-				", password"+ password+
+				", login="+login +
+				", password="+ password+
 				'}';
 	}
+
 }
 
 
