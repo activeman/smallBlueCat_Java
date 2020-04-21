@@ -1,6 +1,8 @@
 package com.csii.webhook.model.pojo;
 
-public class Users {
+import java.io.Serializable;
+
+public class Users implements Serializable {
 
 	public Users(){}
 
