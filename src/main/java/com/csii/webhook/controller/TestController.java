@@ -2,10 +2,8 @@ package com.csii.webhook.controller;
 
 
 
-import com.csii.webhook.model.pojo.ConversationRecord;
-import com.csii.webhook.model.pojo.SlotEntity;
-import com.csii.webhook.model.pojo.TaskQuery;
-import com.csii.webhook.model.pojo.Users;
+import com.alibaba.da.coin.ide.spi.meta.ResultType;
+import com.csii.webhook.model.pojo.*;
 import com.csii.webhook.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -80,7 +78,23 @@ public class TestController {
         taskQuery.setSlotEntities(slotEntities);
 
         List<ConversationRecord> conversationRecords =new  ArrayList<ConversationRecord>();
-        ConversationRecord c1 = new ConversationRecord();
+         long b = 123;
+         int cd =1;
+        ResultType r1 = ResultType.ASK_INF;
+        ConversationRecord c1 = new ConversationRecord(b,"a","a",b,b,"n",b,r1,slotEntities);
+        ConversationRecord c2 = new ConversationRecord(b,"a","a",b,b,"n",b,r1,slotEntities);
+        conversationRecords.add(0,c1);
+        conversationRecords.add(1,c2);
+        taskQuery.setConversationRecords(conversationRecords);
+        //插入  Map<String, SessionEntry> sessionEntries;
+        Map<String, SessionEntry> sessionEntries = new HashMap<>();
+        int timeToLive =1,timeToLive2 =2,liveTime =1,liveTime2=2,taskqueryid =0;
+        long cdf = 123,cdf2=345;
+        SessionEntry ss1 = new SessionEntry(timeToLive,liveTime,cdf,"ss1","",taskqueryid);
+        SessionEntry ss2 = new SessionEntry(timeToLive2,liveTime2,cdf2,"ss2","",taskqueryid);
+        sessionEntries.put("ss1",ss1);
+        sessionEntries.put("ss2",ss2);
+        taskQuery.setSessionEntries(sessionEntries);
         System.out.println(taskQuery);
         String code = testService.saveTaskQuery(taskQuery);
 

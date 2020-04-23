@@ -22,6 +22,18 @@ public class ConversationRecord implements Serializable {
     public ConversationRecord() {
     }
 
+    public ConversationRecord(Long botId, String userInputUtterance, String replyUtterance, Long domainId, Long intentId, String intentName, Long timestamp, ResultType resultType, List<SlotEntity> slotEntities) {
+        this.botId = botId;
+        this.userInputUtterance = userInputUtterance;
+        this.replyUtterance = replyUtterance;
+        this.domainId = domainId;
+        this.intentId = intentId;
+        this.intentName = intentName;
+        this.timestamp = timestamp;
+        this.resultType = resultType;
+        this.slotEntities = slotEntities;
+    }
+
     public ConversationRecord(Long botId, String userInputUtterance, String replyUtterance, Long domainId, Long intentId, String intentName, Long timestamp, ResultType resultType, List<SlotEntity> slotEntities, int taskQueryId) {
         this.botId = botId;
         this.userInputUtterance = userInputUtterance;
