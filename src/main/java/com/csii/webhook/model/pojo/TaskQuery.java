@@ -1,7 +1,7 @@
 package com.csii.webhook.model.pojo;
 
 import com.csii.webhook.model.pojo.ConversationRecord;
-import com.alibaba.da.coin.ide.spi.meta.SessionEntry;
+import com.csii.webhook.model.pojo.SessionEntry;
 import com.csii.webhook.model.pojo.SlotEntity;
 
 import java.io.Serializable;
