@@ -35,7 +35,7 @@
 
     </insert>
 
-    <!--插入taskQuery 集合-->
+    <!--插入taskQuery Slot集合-->
     <insert id="saveTaskQuerySlotEntity" useGeneratedKeys="true" keyProperty="slotId" keyColumn="soltentityid" parameterType="com.csii.webhook.model.pojo.SlotEntity">
         insert into
         slot
@@ -44,6 +44,26 @@
          <foreach collection="list" item="item" index="index" separator=",">
         (#{item.intentParameterId},#{item.intentParameterName},#{item.originalValue},#{item.standardValue},#{item.liveTime},#{item.createTimeStamp},#{item.slotName},#{item.slotValue},#{item.taskqueryid})
          </foreach>
+    </insert>
+
+    <!--存储taskQuery 的List<ConversationRecord>-->
+    <insert id="saveTaskQueryConRcdEntity" useGeneratedKeys="true" keyProperty="conversationRecordId" keyColumn="conversationRecordId" parameterType="com.csii.webhook.model.pojo.ConversationRecord">
+        insert into
+        conversationrecord
+        (botId,userInputUtterance,replyUtterance,domainId,intentId,intentName,timestamp,resultType,taskqueryid)
+        values
+        <foreach collection="list" item="item" index="index" separator=",">
+            (#{item.botId},#{item.userInputUtterance},#{item.replyUtterance},#{item.domainId},#{item.intentId},#{item.intentName},#{item.timestamp},#{item.resultType},#{item.taskQueryId})
+        </foreach>
+    </insert>
+
+    <!--存储sessionentry-->
+    <insert id="saveTaskQuerySessionEntry" useGeneratedKeys="true" keyProperty="sessionentryid" keyColumn="sessionentryid" parameterType="com.csii.webhook.model.pojo.SessionEntry">
+         insert into sessionentry
+         (timeToLive,liveTime,timeStamp,value,sessionkey,taskQueryId)
+         values
+        (#{timeToLive},#{liveTime},#{timeStamp},#{value},#{sessionkey},#{taskQueryId})
+
     </insert>
 
 </mapper>
