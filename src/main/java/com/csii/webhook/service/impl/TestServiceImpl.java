@@ -46,13 +46,15 @@ public class TestServiceImpl implements TestService {
             while (j==0){
             j = testDao.saveTaskQueryReqMapData(taskQueryId,key,value);
             }
-
+            //遍历第二次让j=0 不然不能插入
+            j=0;
         }
         System.out.println("================"+"----------------");
         List<SlotEntity> slotEntities = taskQuery.getSlotEntities();
         for(SlotEntity slotEntity:slotEntities){
             slotEntity.setTaskqueryid(taskQueryId);
         }
+        // k是在xml 里面用迭代器批量插入返回受影响行数
         while (k!=slotEntities.size()){
             k= testDao.saveTaskQuerySlotEntity(slotEntities);
         }
@@ -61,9 +63,12 @@ public class TestServiceImpl implements TestService {
         for (ConversationRecord conversationRecord:conversationRecords) {
             conversationRecord.setTaskQueryId(taskQueryId);
         }
+        // g是在xml 里面用迭代器批量插入返回受影响行数
         while(g!=conversationRecords.size()){
             g= testDao.saveTaskQueryConRcdEntity(conversationRecords);
+            System.out.println("========g+-------"+g);
         }
+        System.out.println("========g+========"+g);
         System.out.println("taskquery的conversationRecord插入成功");
         //插入session
         Map<String, SessionEntry> sessionMap = taskQuery.getSessionEntries();
