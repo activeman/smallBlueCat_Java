@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
@@ -20,6 +21,7 @@ import java.util.Map;
  * @author 571002868
  */
 @Controller
+@ResponseBody
 public class BohaiController {
     @Autowired
     UsersService usersService;
@@ -30,7 +32,6 @@ public class BohaiController {
      */
 //    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
     @RequestMapping("/helloxxxx")//浏览器测试用
-    @ResponseBody
     //结果转json用
     public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
         /**
@@ -41,11 +42,11 @@ public class BohaiController {
         /**
          * 构建服务返回结果
          */
+
         return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
     }
 
     @RequestMapping("/c")
-    @ResponseBody
     public Map<String, Object> consent(String code) {
         System.out.println("---consent---");
         System.out.println();
@@ -58,69 +59,78 @@ public class BohaiController {
         return map;
     }
 
+    /**
+     * 存款产品
+     */
+    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
+    public ResultModel<TaskResult> depositController(@RequestBody String taskQuery) {
 
-}
+        //进入前判断token 和openid信息，到这里已经确认没问题了
 
+        // 解析请求获取 TaskQuery
+        TaskQuery query = MetaFormat.parseToQuery(taskQuery);
 
-// 天气服务执行，根据NLU理解的结果做相应处理并返回回复语句
-/*@Component
-class WeatherHandleImpl implements WeatherHandle {
+        // 打印一下query，观察分析数据
+        communictionService.printQuery(query);
 
-    @Override
-    public TaskResult execute(TaskQuery taskQuery) {
-        //logger.info("WeatherHandleImpl execute...");
+        //向redis里存意图标签。key：openid:token:"intent" , value: "deposit"
 
-        //从请求中获取意图参数以及参数值
-       // Map<String, String> paramMap = taskQuery.getSlotEntities().stream().collect(Collectors.toMap(slotItem -> slotItem.getIntentParameterName(), slotItem -> slotItem.getStandardValue()));
-       // logger.info("paramMap ：" + paramMap.toString());
-        //如果意图是询问空气质量，则执行空气质量逻辑
-        if (taskQuery.getIntentName().equals("空气质量")) {
-            return aqiQuery(taskQuery, paramMap);
-            //如果意图是询问天气情况，则执行天气查询逻辑
-        } else if (taskQuery.getIntentName().equals("天气查询")) {
-            return baseQuery(taskQuery, paramMap);
-        } else {
-            return null;
-        }
+        // 调用depositService方法，传入taskQuery，return TaskResult
+
+        // 以下全在 depositService中处理
+
+        //从redis里取出BusinessQueryString
+
+        //判断BusinessQueryString是否为null，为null：new 一个新的 BusinessQuery 对象。
+        // 不为null：BusinessQueryString转为BusinessQuery对象
+
+        //TaskQuery的 Token, SessionId, Utterance, DeviceOpenId，直接赋值给BusinessQuery
+
+        // SlotEntities：在TaskQuery.SlotEntities里做判断， LiveTime为0的，
+        // 赋值给BusinessQuery.SlotEntities，并且以 intentParameterName 的值为可以
+
+        //最重要，也是最复杂的：根据TaskQuery判断出BusinessQuery.BusinessIntent意图，赋值
+        //     可能需要：根据查到的BusinessQuery.BusinessIntent基础上，判断新意图，继续拼接，
+        //      根据SlotEntities的参数是否完整，判断新意图，继续拼接，
+        //      需要继续分析完善，核心步骤
+
+        // 完善以后的BusinessQuery对象重新存到redis里
+
+        // 根据IntentQA获得播放的答案，需要一个槽位替换参数的方法，修改播放答案模板
+
+        //根据BusinessQuery.BusinessIntent，选择响应的resultType是RESULT或ASK_INF
+
+        //如果是ASK_INF，还要根据BusinessIntent判断携带参数的问题
+
+        //在Service里 return TaskResult 方法结束
+
+        // return最后的结果
+        return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
+    }
+
+    /**
+     * 兜底fallback
+     */
+    @RequestMapping(value = "/fallback", method = RequestMethod.POST)
+    public ResultModel<TaskResult> fallbackController(@RequestBody String taskQuery) {
+        //进入前判断token 和openid信息，到这里已经确认没问题了
+
+        // 解析请求获取 TaskQuery
+        TaskQuery query = MetaFormat.parseToQuery(taskQuery);
+
+        // 打印一下query，观察分析数据
+        communictionService.printQuery(query);
+        //把这个com.alibaba.da.coin.ide.spi.standard.TaskQuery 转为com.csii.webhook.model.pojo.TaskQuery 然后存到mysql里，留做日后分析使用
+
+        //从redis里取意图标签。key：openid:token:"intent" , 结果可能是 deposit，可能是fund 可能是 other
+
+        // 使用switch case 走分支，调用各种意图的Service方法，传入taskQuery，return TaskResult
+
+        // 在Service处理完后得到 TaskResult
+
+        // return最后的结果
         return null;
     }
-
-        private TaskResult baseQuery(TaskQuery taskQuery, Map<String, String> paramMap) {
-        TaskResult result = new TaskResult();
-        try {
-            //请求服务并填充回复语句
-            List<NameValuePair> params = new ArrayList<NameValuePair>();
-            params.add(new BasicNameValuePair("areaName", paramMap.get("city")));
-            params.add(new BasicNameValuePair("date", DateUtil.getStartDate(paramMap.get("time"))));
-            String executeBody = httpGet(params);
-            String weather = getWeather(executeBody);
-            Map<String, String> properties = new HashMap<String, String>();
-
-            properties.put("city", paramMap.get("city"));
-            properties.put("time", paramMap.get("time"));
-            properties.put("weather", weather);
-            properties.put("temp_low", getTempLow(executeBody));
-            properties.put("temp_high", getTempHigh(executeBody));
-            properties.put("wind_direct", getWindDirect(executeBody));
-            properties.put("power", getPower(executeBody));
-            if (weather == null) {
-                result.setReply("对不起，我现在只支持查询最近4天的天气");
-            } else {
-                result.setReply(TemplateFillUtil
-                        .fillTemplate(
-                                "@{city} @{time}天气 @{weather}，温度@{temp_low}到@{temp_high}度，@{wind_direct}@{power}",
-                                properties));
-            }
-
-            result.setExecuteCode(ExecuteCode.SUCCESS);
-            result.setResultType(ResultType.RESULT);
-        } catch (Exception e) {
-            logger.info("query exception", e);
-            result.setExecuteCode(ExecuteCode.EXECUTE_ERROR);
-        }
-
-        return result;
-    }
-}*/
+}
 
 
