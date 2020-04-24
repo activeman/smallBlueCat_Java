@@ -1,7 +1,6 @@
 package com.csii.webhook.controller;
 
 
-
 import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.csii.webhook.model.pojo.*;
 import com.csii.webhook.service.TestService;
@@ -9,12 +8,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TestController {
@@ -22,8 +20,6 @@ public class TestController {
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
     private RedisTemplate<Object,Users> redisTemplate;
-    @Autowired
-    private RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate;
     @Autowired
     private TestService testService;
     /**
@@ -104,6 +100,61 @@ public class TestController {
         return result;
     }
 
+
+    //ls-test
+    @RequestMapping("/tr")
+    @ResponseBody
+    public Map<String, Object> testRedisX() {
+
+
+        //向redis里存入数据和设置缓存时间
+        stringRedisTemplate.opsForValue().set("baike", "100", 60 * 2, TimeUnit.SECONDS);
+        //val做-1操作
+        stringRedisTemplate.boundValueOps("baike").increment(-1);
+        //根据key获取缓存中的val
+        stringRedisTemplate.opsForValue().get("baike");
+        //val +1
+        stringRedisTemplate.boundValueOps("baike").increment(1);
+
+        try {
+            Thread.currentThread().sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        //根据key获取过期时间
+        Long to=stringRedisTemplate.getExpire("baike");
+        System.out.println(to);
+
+        stringRedisTemplate.expire("baike",60 * 2, TimeUnit.SECONDS);
+        to=stringRedisTemplate.getExpire("baike");
+        System.out.println(to);
+
+        //根据key获取过期时间并换算成指定单位
+        stringRedisTemplate.getExpire("baike", TimeUnit.SECONDS);
+        //根据key删除缓存
+        stringRedisTemplate.delete("baike");
+        //检查key是否存在，返回boolean值
+        Boolean bo= stringRedisTemplate.hasKey("baike");
+        System.out.println(bo);
+        //向指定key中存放set集合
+        stringRedisTemplate.opsForSet().add("baike", "1", "2", "3");
+        //设置过期时间
+        stringRedisTemplate.expire("baike", 60 , TimeUnit.SECONDS);
+        //根据key查看集合中是否存在指定数据
+        stringRedisTemplate.opsForSet().isMember("baike", "1");
+        //根据key获取set集合
+        Set<String> baike = stringRedisTemplate.opsForSet().members("baike");
+        for (String str : baike) {
+            System.out.println(str);
+        }
+
+        return new HashMap<String, Object>() {{
+            put("hello", 666);
+        }};
+    }
+    @Autowired
+    private RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate;
     @RequestMapping("/selTaskQuery")
     public Map<Object, Object> selTaskQuery(int  taskQueryId){
         return testService.selTaskQuery(taskQueryId);
@@ -111,12 +162,8 @@ public class TestController {
 
     @RequestMapping("/saveRedisTask")
     public Map<Object, Object> saveRedisTask(BusinessQuery businessQuery){
-        Map<Object,Object> map = new HashMap<>();
-        String []token1 = businessQuery.getToken().split("\\.");
-        String str = token1[2];
-        String key = businessQuery.getDeviceOpenId()+str;
-        businessQueryRedisTemplate.opsForValue().set(key,businessQuery);
-        BusinessQuery b1 = businessQueryRedisTemplate.opsForValue().get(key);
+
+
         Map<String, SlotEntity> SlotEntities =new HashMap<>();
         long a =1,b=2;
         SlotEntity s1 = new SlotEntity(a,"1","1","1",1,a,"1","1",1);
@@ -124,17 +171,7 @@ public class TestController {
         SlotEntities.put("s1",s1);
         SlotEntities.put("s2",s2);
         businessQuery.setSlotEntities(SlotEntities);
-        if(b1==null){
-            map.put("code","9999");
-            map.put("msg","存储失败");
-        }else {
-            map.put("code","0000");
-            map.put("msg","存储成功");
-            map.put(key,businessQuery);
-        }
-        System.out.println(str);
-
-        map.put(key,businessQuery);
-        return map;
+        return testService.savebusness(businessQuery);
     }
 }
+

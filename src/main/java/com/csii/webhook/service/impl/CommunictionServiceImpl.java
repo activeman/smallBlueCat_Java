@@ -3,7 +3,6 @@ package com.csii.webhook.service.impl;
 import com.alibaba.da.coin.ide.spi.meta.ExecuteCode;
 import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.alibaba.da.coin.ide.spi.standard.ResultModel;
-import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
 import com.alibaba.fastjson.JSONObject;
 import com.csii.webhook.service.CommunictionService;
@@ -18,7 +17,7 @@ import java.util.Map;
 
 public class CommunictionServiceImpl implements CommunictionService {
     @Override
-    public void printQuery(TaskQuery query) {
+    public void printObject(Object query) {
 
         String json =  JSONObject.toJSONString(query);
         System.out.println(toPrettyFormat(json));

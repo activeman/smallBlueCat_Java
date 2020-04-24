@@ -1,6 +1,7 @@
 package com.csii.webhook.service;
 
 
+import com.csii.webhook.model.pojo.BusinessQuery;
 import com.csii.webhook.model.pojo.TaskQuery;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -16,6 +17,5 @@ public interface TestService {
     Map<Object, Object> selTaskQuery(int taskQueryId);
 
 
-
-
+    Map<Object, Object> savebusness(BusinessQuery businessQuery);
 }

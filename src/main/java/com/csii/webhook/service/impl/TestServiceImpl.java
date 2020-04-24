@@ -6,6 +6,7 @@ import com.csii.webhook.dao.TestDao;
 import com.csii.webhook.model.pojo.*;
 import com.csii.webhook.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -122,7 +123,27 @@ public class TestServiceImpl implements TestService {
         map.put(taskQueryId,taskQuery);
         return map;
     }
+    @Autowired
+    private RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate;
 
+    @Override
+    public Map<Object, Object> savebusness(BusinessQuery businessQuery) {
+        Map<Object,Object> map = new HashMap<>();
+        String []token1 = businessQuery.getToken().split("\\.");
+        String str = token1[2];
+        String key = businessQuery.getDeviceOpenId()+str;
+        businessQueryRedisTemplate.opsForValue().set(key,businessQuery);
+        BusinessQuery b1 = businessQueryRedisTemplate.opsForValue().get(key);
+        if(b1==null){
+            map.put("code","9999");
+            map.put("msg","存储失败");
+        }else {
+            map.put("code","0000");
+            map.put("msg","存储成功");
+            map.put(key,businessQuery);
+        }
+        return map;
+    }
 
 
 }
