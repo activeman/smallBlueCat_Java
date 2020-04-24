@@ -14,9 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * @author 571002868
  */
@@ -38,7 +35,7 @@ public class BohaiController {
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
-        communictionService.printQuery(query);
+        communictionService.printObject(query);
         /**
          * 构建服务返回结果
          */
@@ -46,18 +43,7 @@ public class BohaiController {
         return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
     }
 
-    @RequestMapping("/c")
-    public Map<String, Object> consent(String code) {
-        System.out.println("---consent---");
-        System.out.println();
-        System.out.println(code);
-        System.out.println();
-        Map<String, Object> map = new HashMap<>();
-        map.put("access_token", code);
-        map.put("refresh_token", "refresh123456789");
-        map.put("expires_in", 17600000);
-        return map;
-    }
+
 
     /**
      * 存款产品
@@ -71,7 +57,7 @@ public class BohaiController {
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
 
         // 打印一下query，观察分析数据
-        communictionService.printQuery(query);
+        communictionService.printObject(query);
 
         //向redis里存意图标签。key：openid:token:"intent" , value: "deposit"
 
@@ -119,7 +105,7 @@ public class BohaiController {
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
 
         // 打印一下query，观察分析数据
-        communictionService.printQuery(query);
+        communictionService.printObject(query);
         //把这个com.alibaba.da.coin.ide.spi.standard.TaskQuery 转为com.csii.webhook.model.pojo.TaskQuery 然后存到mysql里，留做日后分析使用
 
         //从redis里取意图标签。key：openid:token:"intent" , 结果可能是 deposit，可能是fund 可能是 other
