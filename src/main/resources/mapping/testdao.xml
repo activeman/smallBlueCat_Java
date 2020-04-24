@@ -1,7 +1,33 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.csii.webhook.dao.TestDao">
- <resultMap id="TaskQueryMap" type="com.alibaba.da.coin.ide.spi.standard.TaskQuery">
+    <resultMap id="TaskQuerySlotList" type="com.csii.webhook.model.pojo.SlotEntity">
+        <id property="slotId" column="soltentityid"/>
+        <result property="intentParameterId" column="intentParameterId"/>
+        <result property="intentParameterName" column="intentParameterName"/>
+        <result property="originalValue" column="originalValue"/>
+        <result property="standardValue" column="standardValue"/>
+        <result property="liveTime" column="liveTime"/>
+        <result property="createTimeStamp" column="createTimeStamp"/>
+        <result property="slotName" column="slotName"/>
+        <result property="slotValue" column="slotValue"/>
+        <result property="taskqueryid" column="taskqueryid"/>
+    </resultMap>
+    <resultMap id="TaskQueryConRcdList" type="com.csii.webhook.model.pojo.ConversationRecord">
+        <id property="conversationRecordId" column="conversationRecordId"/>
+        <result property="botId" column="botId"/>
+        <result property="userInputUtterance" column="userInputUtterance"/>
+        <result property="replyUtterance" column="replyUtterance"/>
+        <result property="domainId" column="domainId"/>
+        <result property="intentId" column="intentId"/>
+        <result property="intentName" column="intentName"/>
+        <result property="timestamp" column="timestamp"/>
+        <result property="resultType" column="resultType"/>
+        <result property="taskQueryId" column="taskQueryId"/>
+        <collection property="slotEntities" resultMap="TaskQuerySlotList"/>
+    </resultMap>
+    <resultMap id="TaskQueryMap" type="com.csii.webhook.model.pojo.TaskQuery">
+     <id property="taskQueryId" column="taskQueryId"/>
      <result property="sessionId" column="sessionId"/><!--会话ID，session内的对话此ID相同-->
      <result property="utterance" column="utterance"/><!--用户输入语句-->
      <result property="skillId" column="skillId"/><!--技能ID-->
@@ -11,11 +37,32 @@
      <result property="intentName" column="intentName"/><!--意图名称-->
      <result property="botId" column="botId"/><!--应用ID，来自于创建的应用或者技能-->
      <result property="domainId" column="domainId"/><!--领域ID-->
+     <!--<association property="slotEntities" resultMap="TaskQuerySlotList" javaType="com.csii.webhook.model.pojo.SlotEntity"/>-->
+     <collection property="slotEntities" resultMap="TaskQuerySlotList"/>
+        <collection property="conversationRecords" resultMap="TaskQueryConRcdList"/>
+
+<!--
+     <association property="conversationRecords" resultMap="TaskQueryConRcdList" javaType="com.csii.webhook.model.pojo.ConversationRecord"/>
+-->
  </resultMap>
-    <!--private Map<String, String> requestData = null;--><!--业务请求附带参数,来自于设备调用语义理解服务额外携带的信息，只做透传-->
-    <!--private List<SlotEntity> slotEntities = null;--><!--从用户语句中抽取出的slot参数信息-->
-    <!--private List<ConversationRecord> conversationRecords = null;-->
-    <!-- private Map<String, SessionEntry> sessionEntries;-->
+
+
+    <resultMap id="TaskQueryReqDataMap" type="com.csii.webhook.model.pojo.RequestData">
+     <id property="reuqestid" column="reuqestid"/>
+     <result property="mapkey" column="mapkey"/>
+     <result property="mapvalue" column="mapvalue"/>
+     <result property="taskqueryid" column="taskqueryid"/>
+    </resultMap>
+    <resultMap id="TaskQuerySessionMap" type="com.csii.webhook.model.pojo.SessionEntry">
+        <id property="sessionentryid" column="sessionentryid"/>
+        <result property="timeToLive" column="timeToLive"/>
+        <result property="liveTime" column="liveTime"/>
+        <result property="timeStamp" column="timeStamp"/>
+        <result property="value" column="value"/>
+        <result property="sessionkey" column="sessionkey"/>
+        <result property="taskQueryId" column="taskQueryId"/>
+    </resultMap>
+
     <insert id="saveTaskQuery"  parameterType="com.csii.webhook.model.pojo.TaskQuery" useGeneratedKeys="true" keyProperty="taskQueryId">
 
         <selectKey resultType="java.lang.Integer" order="AFTER" keyProperty="taskQueryId" keyColumn="taskQueryId">
@@ -65,5 +112,27 @@
         (#{timeToLive},#{liveTime},#{timeStamp},#{value},#{sessionkey},#{taskQueryId})
 
     </insert>
+
+    <!--查询taskquery数据库-->
+    <select id="selTaskQuery" parameterType="java.lang.Integer" resultMap="TaskQueryMap">
+      select
+       tq.*,sl.*,cr.*
+      from taskquery tq,slot sl,conversationrecord cr
+      where
+      tq.taskQueryId = sl.taskQueryId and
+      tq.taskQueryId = cr.taskQueryId and
+      tq.taskQueryId = #{taskQueryId}
+    </select>
+    <select id="selTaskQueryReqData" parameterType="java.lang.Integer" resultMap="TaskQueryReqDataMap">
+       select t.reuqestid,t.mapkey,t.mapvalue,t.taskqueryid
+       from requestdata t
+       where t.taskqueryid = #{taskqueryid}
+    </select>
+
+    <select id="selTaskQuerySessionList" parameterType="java.lang.Integer" resultMap="TaskQuerySessionMap">
+      SELECT  s.sessionentryid,s.timeToLive,s.liveTime,s.timeStamp,s.value,s.sessionkey,s.taskQueryId
+      FROM sessionentry s
+      where s.taskQueryId = #{taskqueryid}
+    </select>
 
 </mapper>

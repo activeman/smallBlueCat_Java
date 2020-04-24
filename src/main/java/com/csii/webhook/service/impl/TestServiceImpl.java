@@ -3,17 +3,16 @@ package com.csii.webhook.service.impl;
 
 
 import com.csii.webhook.dao.TestDao;
-import com.csii.webhook.model.pojo.ConversationRecord;
-import com.csii.webhook.model.pojo.SessionEntry;
-import com.csii.webhook.model.pojo.SlotEntity;
-import com.csii.webhook.model.pojo.TaskQuery;
+import com.csii.webhook.model.pojo.*;
 import com.csii.webhook.service.TestService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-
+@Transactional
 @Service
 public class TestServiceImpl implements TestService {
 
@@ -95,4 +94,35 @@ public class TestServiceImpl implements TestService {
         }
         return str;
     }
+
+    //查询taskQuery
+    @Override
+    public Map<Object, Object> selTaskQuery(int taskQueryId) {
+        Map<Object, Object> map = new HashMap<>();
+        TaskQuery taskQuery = testDao.selTaskQuery(taskQueryId);
+        System.out.println("初次查询输出"+taskQuery);
+        //查询TaskQuery 的requestData 属性
+        List<RequestData>requestData = testDao.selTaskQueryReqData(taskQueryId);
+        Map <String,String> reqmap = new HashMap<>();
+        for (RequestData req:requestData) {
+            reqmap.put(req.getMapkey(),req.getMapvalue());
+        }
+        taskQuery.setRequestData(reqmap);
+        System.out.println("第二次输出"+taskQuery);
+        List<SessionEntry>sessionEntries = testDao.selTaskQuerySessionList(taskQueryId);
+        Map<String ,SessionEntry>sessionEntryMap = new HashMap<>();
+        for (SessionEntry session:sessionEntries) {
+            sessionEntryMap.put(session.getSessionkey(),session);
+        }
+        taskQuery.setSessionEntries(sessionEntryMap);
+        //
+        System.out.println(taskQuery);
+        map.put("code","0000");
+        map.put("msg","查询成功");
+        map.put(taskQueryId,taskQuery);
+        return map;
+    }
+
+
+
 }

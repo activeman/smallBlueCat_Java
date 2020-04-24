@@ -2,16 +2,14 @@ package com.csii.webhook.dao;
 
 
 
-import com.csii.webhook.model.pojo.ConversationRecord;
-import com.csii.webhook.model.pojo.SessionEntry;
-import com.csii.webhook.model.pojo.SlotEntity;
-import com.csii.webhook.model.pojo.TaskQuery;
+import com.csii.webhook.model.pojo.*;
 import org.apache.ibatis.annotations.Mapper;
+import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-@Transactional
+@Component
 @Mapper
 public interface TestDao {
     // 存储 TaskQuery对象
@@ -24,4 +22,10 @@ public interface TestDao {
     int saveTaskQueryConRcdEntity(List<ConversationRecord> conversationRecords);
     //存储taskQuery 的sessionEntry
     int saveTaskQuerySessionEntry(SessionEntry sessionvalue);
+    //查询taskquery
+    TaskQuery selTaskQuery(int taskQueryId);
+    //查询taskquery对应的requestdata 集合
+    List<RequestData> selTaskQueryReqData(int taskQueryId);
+    //查询taskquery对应的 List<SlotEntity> slotEntities = null;
+    List<SessionEntry> selTaskQuerySessionList(int taskQueryId);
 }

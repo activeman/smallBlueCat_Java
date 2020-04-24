@@ -23,6 +23,8 @@ public class TestController {
     @Autowired
     private RedisTemplate<Object,Users> redisTemplate;
     @Autowired
+    private RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate;
+    @Autowired
     private TestService testService;
     /**
      * Redis常见的五大数据类型
@@ -100,5 +102,39 @@ public class TestController {
 
         result.put("code",code);
         return result;
+    }
+
+    @RequestMapping("/selTaskQuery")
+    public Map<Object, Object> selTaskQuery(int  taskQueryId){
+        return testService.selTaskQuery(taskQueryId);
+    }
+
+    @RequestMapping("/saveRedisTask")
+    public Map<Object, Object> saveRedisTask(BusinessQuery businessQuery){
+        Map<Object,Object> map = new HashMap<>();
+        String []token1 = businessQuery.getToken().split("\\.");
+        String str = token1[2];
+        String key = businessQuery.getDeviceOpenId()+str;
+        businessQueryRedisTemplate.opsForValue().set(key,businessQuery);
+        BusinessQuery b1 = businessQueryRedisTemplate.opsForValue().get(key);
+        Map<String, SlotEntity> SlotEntities =new HashMap<>();
+        long a =1,b=2;
+        SlotEntity s1 = new SlotEntity(a,"1","1","1",1,a,"1","1",1);
+        SlotEntity s2 = new SlotEntity(b,"2","2","2",2,b,"2","2",2);
+        SlotEntities.put("s1",s1);
+        SlotEntities.put("s2",s2);
+        businessQuery.setSlotEntities(SlotEntities);
+        if(b1==null){
+            map.put("code","9999");
+            map.put("msg","存储失败");
+        }else {
+            map.put("code","0000");
+            map.put("msg","存储成功");
+            map.put(key,businessQuery);
+        }
+        System.out.println(str);
+
+        map.put(key,businessQuery);
+        return map;
     }
 }

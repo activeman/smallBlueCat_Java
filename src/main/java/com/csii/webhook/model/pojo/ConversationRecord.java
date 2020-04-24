@@ -134,4 +134,21 @@ public class ConversationRecord implements Serializable {
     public void setSlotEntities(List<SlotEntity> slotEntities) {
         this.slotEntities = slotEntities;
     }
+
+    @Override
+    public String toString() {
+        return "ConversationRecord{" +
+                "conversationRecordId=" + conversationRecordId +
+                ", botId=" + botId +
+                ", userInputUtterance='" + userInputUtterance + '\'' +
+                ", replyUtterance='" + replyUtterance + '\'' +
+                ", domainId=" + domainId +
+                ", intentId=" + intentId +
+                ", intentName='" + intentName + '\'' +
+                ", timestamp=" + timestamp +
+                ", resultType=" + resultType +
+                ", slotEntities=" + slotEntities +
+                ", taskQueryId=" + taskQueryId +
+                '}';
+    }
 }

@@ -1,10 +1,8 @@
 package com.csii.webhook.model.pojo;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.ToString;
+import lombok.*;
 
+import java.io.Serializable;
 import java.util.Map;
 
 /**
@@ -36,7 +34,7 @@ https://www.cnblogs.com/pcheng/p/10945476.html
 @ToString
 @NoArgsConstructor
 @AllArgsConstructor
-public class BusinessQuery {
+public class BusinessQuery implements Serializable {
     private String Id, Token, SessionId, Utterance, DeviceOpenId;//全部继承TaskQuery信息//每一次请求都要验证token
     private String BusinessIntent;//业务意图，非TaskQuery意图
     private Map<String, SlotEntity> SlotEntities;//从TaskQuery信息处理后的得到

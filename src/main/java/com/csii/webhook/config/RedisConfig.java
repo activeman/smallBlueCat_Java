@@ -1,5 +1,7 @@
 package com.csii.webhook.config;
 
+import com.csii.webhook.model.pojo.BusinessQuery;
+import com.csii.webhook.model.pojo.TaskQuery;
 import com.csii.webhook.model.pojo.TokenEntity;
 import com.csii.webhook.model.pojo.Users;
 import org.springframework.context.annotation.Bean;
@@ -33,6 +35,16 @@ public class RedisConfig {
         return template;
     }
 
+    @Bean
+    public RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate(
+            RedisConnectionFactory redisConnectionFactory)
+            throws UnknownHostException {
+        RedisTemplate<String, BusinessQuery> template = new RedisTemplate<String, BusinessQuery>();
+        template.setConnectionFactory(redisConnectionFactory);
+        Jackson2JsonRedisSerializer<BusinessQuery> ser = new Jackson2JsonRedisSerializer<BusinessQuery>(BusinessQuery.class);
+        template.setDefaultSerializer(ser);
+        return template;
+    }
 
 
 //    //CacheManagerCustomizers可以来定制缓存的一些规则
