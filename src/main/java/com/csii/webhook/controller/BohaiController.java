@@ -38,7 +38,7 @@ public class BohaiController {
          * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
          */
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
-        communictionService.printQuery(query);
+        communictionService.printObject(query);
         /**
          * 构建服务返回结果
          */
@@ -71,7 +71,7 @@ public class BohaiController {
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
 
         // 打印一下query，观察分析数据
-        communictionService.printQuery(query);
+        communictionService.printObject(query);
 
         //向redis里存意图标签。key：openid:token:"intent" , value: "deposit"
 
@@ -119,7 +119,7 @@ public class BohaiController {
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
 
         // 打印一下query，观察分析数据
-        communictionService.printQuery(query);
+        communictionService.printObject(query);
         //把这个com.alibaba.da.coin.ide.spi.standard.TaskQuery 转为com.csii.webhook.model.pojo.TaskQuery 然后存到mysql里，留做日后分析使用
 
         //从redis里取意图标签。key：openid:token:"intent" , 结果可能是 deposit，可能是fund 可能是 other
