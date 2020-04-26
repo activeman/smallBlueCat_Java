@@ -21,6 +21,9 @@ public class TokenFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         System.out.println("进入TokenFilter");
+        //前端传过来的token，是加密过的session
+        String token = servletRequest.getParameter("token");
+
         filterChain.doFilter(servletRequest,servletResponse);
 
     }
