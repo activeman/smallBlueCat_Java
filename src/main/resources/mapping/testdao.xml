@@ -116,7 +116,9 @@
     <!--查询taskquery数据库-->
     <select id="selTaskQuery" parameterType="java.lang.Integer" resultMap="TaskQueryMap">
       select
-       tq.*,sl.*,cr.*
+      		 tq.taskQueryId,tq.sessionId,tq.utterance,tq.skillId,tq.skillName,tq.token,tq.intentId,tq.intentName,tq.botId,tq.domainId,
+			 sl.soltentityid,sl.intentParameterId,sl.intentParameterName,sl.originalValue,sl.standardValue,sl.liveTime,sl.createTimeStamp,sl.slotName,sl.slotValue,sl.taskqueryid,
+			 cr.conversationrecordid,cr.botId,cr.userInputUtterance, cr.replyUtterance,cr.domainId,cr.intentId,cr.intentName,cr.timestamp,cr.resultType,cr.taskqueryid
       from taskquery tq,slot sl,conversationrecord cr
       where
       tq.taskQueryId = sl.taskQueryId and
