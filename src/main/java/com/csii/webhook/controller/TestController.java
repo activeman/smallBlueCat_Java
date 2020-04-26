@@ -155,7 +155,7 @@ public class TestController {
     }
     @Autowired
     private RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate;
-    @RequestMapping("/selTaskQuery")
+    @RequestMapping("/selTaskQuery.do")
     public Map<Object, Object> selTaskQuery(int  taskQueryId){
         return testService.selTaskQuery(taskQueryId);
     }
