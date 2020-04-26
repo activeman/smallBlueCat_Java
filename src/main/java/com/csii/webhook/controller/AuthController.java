@@ -27,7 +27,7 @@ public class AuthController {
      * token私钥
      */
 
-    @RequestMapping("/auth")
+    @RequestMapping("/auth.do")
     public String auth(String redirect_uri, String client_id, String response_type, String state, Model model){
 
         model.addAttribute("url",redirect_uri);
@@ -50,7 +50,7 @@ public class AuthController {
     private AuthService authService;
     @Autowired
     private LoginService loginService;
-    @RequestMapping("/login")
+    @RequestMapping("/login.do")
     public String login(String login, String password, String url, String state, Model model){
         String token = authService.sign("csii");
         boolean bool = loginService.login(login,password);
@@ -92,7 +92,7 @@ public class AuthController {
 //    }
 
 
-    @RequestMapping("/consent")
+    @RequestMapping("/consent.do")
     @ResponseBody
     public Map<String, Object> consent(HttpServletRequest request) {
 

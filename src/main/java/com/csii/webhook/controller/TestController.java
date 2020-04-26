@@ -160,7 +160,7 @@ public class TestController {
         return testService.selTaskQuery(taskQueryId);
     }
 
-    @RequestMapping("/saveRedisTask")
+    @RequestMapping("/saveRedisTask.do")
     public Map<Object, Object> saveRedisTask(BusinessQuery businessQuery){
 
 

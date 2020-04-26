@@ -31,7 +31,7 @@ public class BohaiController {
      * /financial开发者提供的技能执行路径地址，请求方式为POST请求
      */
 //    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
-    @RequestMapping("/helloxxxx")//浏览器测试用
+    @RequestMapping("/helloxxxx.do")//浏览器测试用
     //结果转json用
     public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
         /**
@@ -46,7 +46,7 @@ public class BohaiController {
         return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
     }
 
-    @RequestMapping("/c")
+    @RequestMapping("/c.do")
     public Map<String, Object> consent(String code) {
         System.out.println("---consent---");
         System.out.println();
@@ -62,7 +62,7 @@ public class BohaiController {
     /**
      * 存款产品
      */
-    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
+    @RequestMapping(value = "/deposit.do", method = RequestMethod.POST)
     public ResultModel<TaskResult> depositController(@RequestBody String taskQuery) {
 
         //进入前判断token 和openid信息，到这里已经确认没问题了
@@ -111,7 +111,7 @@ public class BohaiController {
     /**
      * 兜底fallback
      */
-    @RequestMapping(value = "/fallback", method = RequestMethod.POST)
+    @RequestMapping(value = "/fallback.do", method = RequestMethod.POST)
     public ResultModel<TaskResult> fallbackController(@RequestBody String taskQuery) {
         //进入前判断token 和openid信息，到这里已经确认没问题了
 

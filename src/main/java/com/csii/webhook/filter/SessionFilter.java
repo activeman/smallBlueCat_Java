@@ -3,6 +3,7 @@ package com.csii.webhook.filter;
 
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.annotation.Order;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.*;
@@ -12,6 +13,13 @@ import java.io.PrintWriter;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * 交易执行前验证redis服务是否正常
+ * @WebFilter用于将一个类声明为过滤器
+ * @Order(1)设置过滤器的执行顺序数字越小越先执行
+ *
+ */
+@Order(1)
 @WebFilter(filterName="SessionFilter",urlPatterns="*.do")
 public class SessionFilter implements Filter {
 
@@ -24,6 +32,8 @@ public class SessionFilter implements Filter {
     @Value("${spring.redis.password}")
     private String  password;
 
+    @Value("${webhook.redis.verification}")
+    private boolean  verification;
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
@@ -32,8 +42,24 @@ public class SessionFilter implements Filter {
 
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
-        Map<Object,Object> map = new HashMap<>();
+
         System.out.println("第一次:url"+url+"port"+port+"password"+password);
+        //添加开始redis服务验证按钮标签
+        if(verification){
+            openRedisVerificate(url,port,password,servletRequest,servletResponse,filterChain);
+        }else {
+            filterChain.doFilter(servletRequest,servletResponse);
+        }
+    }
+
+    @Override
+    public void destroy() {
+
+    }
+
+    //是否开启redis服验证
+    public static void openRedisVerificate(String url,int port,String password,ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
+        Map<Object,Object> map = new HashMap<>();
         boolean redis = getRedisResult(url,port,password);
         System.out.println(redis);
         if(redis){
@@ -53,9 +79,9 @@ public class SessionFilter implements Filter {
             pw.flush();
             pw.close();
         }
+
     }
-
-
+    //判断 redis服务是否正常
     public static boolean getRedisResult(String url, int port,String password){
         boolean result = false;
         try {
@@ -76,8 +102,4 @@ public class SessionFilter implements Filter {
         return  result;
     }
 
-    @Override
-    public void destroy() {
-
-    }
 }
