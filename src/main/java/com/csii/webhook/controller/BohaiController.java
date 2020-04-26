@@ -1,6 +1,5 @@
 package com.csii.webhook.controller;
 
-import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.alibaba.da.coin.ide.spi.standard.ResultModel;
 import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
@@ -26,43 +25,33 @@ public class BohaiController {
     @Autowired
     UsersService usersService;
     CommunictionService communictionService;
-
     /**
-     * /financial开发者提供的技能执行路径地址，请求方式为POST请求
+     * Test
      */
-//    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)//应用时用
-    @RequestMapping("/helloxxxx.do")//浏览器测试用
-    //结果转json用
+    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)
     public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
-        /**
-         * 将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
-         */
+        //将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
+        //打印一下
         communictionService.printObject(query);
-        /**
-         * 构建服务返回结果
-         */
-
-        return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
+        // 构建服务返回结果
+        // return communictionService.responseTaskResult("请输入一句话",query.getIntentId(),"a","b");//ASK_INF
+        return communictionService.responseTaskResult("请输入一句话");//RESULT
     }
 
-    @RequestMapping("/c.do")
+    @RequestMapping("/c")
     public Map<String, Object> consent(String code) {
         System.out.println("---consent---");
-        System.out.println();
-        System.out.println(code);
-        System.out.println();
+        System.out.println("code:\t"+code);
         Map<String, Object> map = new HashMap<>();
-        map.put("access_token", code);
-        map.put("refresh_token", "refresh123456789");
-        map.put("expires_in", 17600000);
+        map.put("hello", "world");
         return map;
     }
 
     /**
      * 存款产品
      */
-    @RequestMapping(value = "/deposit.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
     public ResultModel<TaskResult> depositController(@RequestBody String taskQuery) {
 
         //进入前判断token 和openid信息，到这里已经确认没问题了
@@ -105,13 +94,13 @@ public class BohaiController {
         //在Service里 return TaskResult 方法结束
 
         // return最后的结果
-        return communictionService.responseTaskResult("请输入一句话", ResultType.RESULT);
+        return communictionService.responseTaskResult("请输入一句话");
     }
 
     /**
      * 兜底fallback
      */
-    @RequestMapping(value = "/fallback.do", method = RequestMethod.POST)
+    @RequestMapping(value = "/fallback", method = RequestMethod.POST)
     public ResultModel<TaskResult> fallbackController(@RequestBody String taskQuery) {
         //进入前判断token 和openid信息，到这里已经确认没问题了
 

@@ -17,21 +17,19 @@ import java.util.Map;
  */
 @Controller
 public class AuthController {
+    @Autowired
+    private AuthService authService;
+    @Autowired
+    private LoginService loginService;
 
     /**
-    * 跳转登录页面
-    *
-    */
-
-    /**
-     * token私钥
+     * 跳转登录页面
      */
-
     @RequestMapping("/auth.do")
-    public String auth(String redirect_uri, String client_id, String response_type, String state, Model model){
+    public String auth(String redirect_uri, String client_id, String response_type, String state, Model model) {
 
-        model.addAttribute("url",redirect_uri);
-        model.addAttribute("state",state);
+        model.addAttribute("url", redirect_uri);
+        model.addAttribute("state", state);
 
         System.out.println("auth-----------------------");
         System.out.println("client_id:" + client_id);
@@ -41,20 +39,18 @@ public class AuthController {
 
         //平台账户密码认证通过，跳转到登录页面
 
-            return "login";
+        return "login";
 
     }
 
-
-    @Autowired
-    private AuthService authService;
-    @Autowired
-    private LoginService loginService;
+    /**
+     * token私钥
+     */
     @RequestMapping("/login.do")
-    public String login(String login, String password, String url, String state, Model model){
+    public String login(String login, String password, String url, String state, Model model) {
         String token = authService.sign("csii");
-        boolean bool = loginService.login(login,password);
-        String urlSplicing=loginService.urlSplicing(bool,url,state,token,model);
+        boolean bool = loginService.login(login, password);
+        String urlSplicing = loginService.urlSplicing(bool, url, state, token, model);
         return urlSplicing;
     }
 
@@ -102,11 +98,11 @@ public class AuthController {
         String code = request.getParameter("code");
         String redirect_uri = request.getParameter("redirect_uri");
 
-        System.out.println("client_id\t"+client_id);
-        System.out.println("grant_type\t"+grant_type);
-        System.out.println("client_secret\t"+client_secret);
-        System.out.println("code\t"+code);
-        System.out.println("redirect_uri\t"+redirect_uri);
+        System.out.println("client_id\t" + client_id);
+        System.out.println("grant_type\t" + grant_type);
+        System.out.println("client_secret\t" + client_secret);
+        System.out.println("code\t" + code);
+        System.out.println("redirect_uri\t" + redirect_uri);
 
         Map<String, Object> map = new HashMap<>();
         map.put("access_token", code);
