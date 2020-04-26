@@ -48,44 +48,15 @@ public class AuthController {
      */
     @RequestMapping("/login.do")
     public String login(String login, String password, String url, String state, Model model) {
-        String token = authService.sign("csii");
-        boolean bool = loginService.login(login, password);
-        String urlSplicing = loginService.urlSplicing(bool, url, state, token, model);
-        return urlSplicing;
+        if (loginService.login(login, password)){
+            String token = authService.sign("csii");
+            return url + "&code=" + token + "&state=" + state;
+        }else {
+            model.addAttribute("url",url);
+            model.addAttribute("state",state);
+            return "login";
+        }
     }
-
-//    @Autowired
-//    private AuthService authService;
-//    @Autowired
-//    private LoginService loginService;
-//    @RequestMapping("/login")
-//    @ResponseBody
-//    public Map<String, Object> login(String login, String password){
-//        String token = authService.sign("csii");
-//        Boolean bool = loginService.login(login,password);
-//
-////        String urlSplicing=loginService.urlSplicing(bool,url,state,token,model);
-//        Map<String, Object> map = new HashMap<>();
-//        map.put("access_token", "");
-//        map.put("refresh_token", "refresh123456789");
-//        map.put("expires_in", 17600000);
-//        return map;
-//    }
-//    private FindUsersDao dao;
-//    @RequestMapping("/login")
-//   public String login(String login, String password, String url, String state, Model model)  {
-//        Users user = dao.FindUsersDao();
-//       if (login.equals(user.getLogin()) && p,passwordassword.equals(user.getPassword()) ){
-//           String token = authService.sign("csii");
-//           String newUrl = url + "&code=" + token + "&state=" + state;
-//           return "redirect:" + newUrl;
-//       }else{
-//           model.addAttribute("url",url);
-//           model.addAttribute("state",state);
-//           return "login";
-//       }
-//
-//    }
 
 
     @RequestMapping("/consent.do")

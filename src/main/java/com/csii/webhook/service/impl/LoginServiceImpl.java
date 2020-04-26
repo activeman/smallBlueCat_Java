@@ -5,7 +5,6 @@ import com.csii.webhook.model.pojo.Users;
 import com.csii.webhook.service.LoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.ui.Model;
 
 
 @Service
@@ -15,41 +14,24 @@ public class LoginServiceImpl implements LoginService {
     private FindUsersDao findUsers;
 
     @Override
-    public Boolean login(String login, String password)  {
+    public Boolean login(String login, String password) {
 
-        Users user = findUsers.findUsers(login,password);
+        Users user = findUsers.findUsers(login, password);
 
         int id = 0;
         try {
-            id =  user.getId();
-        }catch (Exception e){
+            id = user.getId();
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if(id==0){
+        if (id == 0) {
             System.out.println("查询失败");
             return false;
-        }else if(login.equals(user.getLogin()) && password.equals(user.getPassword()) ){
-            System.out.println(user);
+        } else {
             System.out.println("查询成功");
             return true;
-        } else{
-            System.out.println("查询失败");
-            return false;
         }
 
-    }
-
-
-    //    地址拼接
-    @Override
-    public String urlSplicing(boolean t,String url, String state,String token, Model model)  {
-        if (t==true){
-            String newUrl = url + "&code=" + token + "&state=" + state;
-            return newUrl;
-        }else{
-            model.addAttribute("url",url);
-            model.addAttribute("state",state);
-            return "login";
-        }
     }
 }
+
