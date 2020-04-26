@@ -2,6 +2,7 @@ package com.csii.webhook.filter;
 
 
 
+import org.springframework.beans.factory.annotation.Value;
 import redis.clients.jedis.Jedis;
 
 import javax.servlet.*;
@@ -13,6 +14,17 @@ import java.util.Map;
 
 @WebFilter(filterName="SessionFilter",urlPatterns="*.do")
 public class SessionFilter implements Filter {
+
+    @Value("${spring.redis.host}")
+    private String url;
+
+    @Value("${spring.redis.port}")
+    private int  port;
+
+    @Value("${spring.redis.password}")
+    private String  password;
+
+
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {
 
@@ -21,7 +33,8 @@ public class SessionFilter implements Filter {
     @Override
     public void doFilter(ServletRequest servletRequest, ServletResponse servletResponse, FilterChain filterChain) throws IOException, ServletException {
         Map<Object,Object> map = new HashMap<>();
-        boolean redis = getRedisResult("127.0.0.1",6379,"bank123456");
+        System.out.println("第一次:url"+url+"port"+port+"password"+password);
+        boolean redis = getRedisResult(url,port,password);
         System.out.println(redis);
         if(redis){
             filterChain.doFilter(servletRequest,servletResponse);
