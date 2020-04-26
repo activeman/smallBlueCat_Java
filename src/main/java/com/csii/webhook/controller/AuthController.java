@@ -50,7 +50,7 @@ public class AuthController {
     public String login(String login, String password, String url, String state, Model model) {
         if (loginService.login(login, password)){
             String token = authService.sign("csii");
-            return url + "&code=" + token + "&state=" + state;
+            return "redirect:" + url + "&code=" + token + "&state=" + state;
         }else {
             model.addAttribute("url",url);
             model.addAttribute("state",state);
