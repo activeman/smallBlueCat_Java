@@ -32,7 +32,7 @@ public class TestController {
      *  stringRedisTemplate.opsForZSet()[ZSet（有序集合）]
      */
     //存取redis字符串
-    @RequestMapping("/testRedis1")
+    @RequestMapping("/testRedis1.do")
     public void testRedis1(){
         //存redis字符串
      stringRedisTemplate.opsForValue().set("hello","你好！");
@@ -43,7 +43,7 @@ public class TestController {
         stringRedisTemplate.opsForList().leftPush("list1","23");
     }
     //存储redis对象
-    @RequestMapping("/testRedis2")
+    @RequestMapping("/testRedis2.do")
     public void testRedis2(){
         Users users =new Users();
         users.setId(1);
@@ -54,13 +54,13 @@ public class TestController {
         redisTemplate.opsForValue().set("u1",users);
     }
     //获取redis存取对象
-    @RequestMapping("/testRedis3")
+    @RequestMapping("/testRedis3.do")
     public void testRedis3(){
       Users users =  redisTemplate.opsForValue().get("u1");
         System.out.println(users);
     }
 
-    @RequestMapping("/saveTaskQuery")
+    @RequestMapping("/saveTaskQuery.do")
     public Map<String, String> saveTaskQuery(TaskQuery taskQuery){
         Map<String,String> result = new HashMap<>();
         Map<String,String> result1 = new HashMap<>();
@@ -102,7 +102,7 @@ public class TestController {
 
 
     //ls-test
-    @RequestMapping("/tr")
+    @RequestMapping("/tr.do")
     @ResponseBody
     public Map<String, Object> testRedisX() {
 
