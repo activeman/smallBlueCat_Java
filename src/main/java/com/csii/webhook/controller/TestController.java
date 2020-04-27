@@ -4,6 +4,8 @@ package com.csii.webhook.controller;
 import com.alibaba.da.coin.ide.spi.meta.ResultType;
 import com.csii.webhook.model.pojo.*;
 import com.csii.webhook.service.TestService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.StringRedisTemplate;
@@ -16,6 +18,9 @@ import java.util.concurrent.TimeUnit;
 
 @RestController
 public class TestController {
+
+    private Logger logger = LoggerFactory.getLogger(TestController.class);
+
     @Autowired
     private StringRedisTemplate stringRedisTemplate;
     @Autowired
@@ -171,7 +176,9 @@ public class TestController {
         SlotEntities.put("s1",s1);
         SlotEntities.put("s2",s2);
         businessQuery.setSlotEntities(SlotEntities);
-        return testService.savebusness(businessQuery);
+        return testService.saveBusinessQuery(businessQuery);
     }
+
+
 }
 

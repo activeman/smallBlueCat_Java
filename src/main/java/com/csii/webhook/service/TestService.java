@@ -15,7 +15,6 @@ public interface TestService {
     String saveTaskQuery(TaskQuery taskQuery);
     //查询taskQuery
     Map<Object, Object> selTaskQuery(int taskQueryId);
-
-
-    Map<Object, Object> savebusness(BusinessQuery businessQuery);
+   //存储缓存BusinessQuery
+    Map<Object, Object> saveBusinessQuery(BusinessQuery businessQuery);
 }
