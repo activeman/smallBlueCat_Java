@@ -9,6 +9,6 @@
     </resultMap>
 
     <select id="findUsers"  parameterType="java.lang.String" resultMap="TestMap">
-        select * from user1 where login =#{login} and password =#{password};
+        select id from user1 where login =#{login} and password =#{password};
     </select>
 </mapper>
