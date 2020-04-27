@@ -13,6 +13,8 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
+
 @Transactional
 @Service
 public class TestServiceImpl implements TestService {
@@ -127,12 +129,15 @@ public class TestServiceImpl implements TestService {
     private RedisTemplate<String, BusinessQuery> businessQueryRedisTemplate;
 
     @Override
-    public Map<Object, Object> savebusness(BusinessQuery businessQuery) {
+    public Map<Object, Object> saveBusinessQuery(BusinessQuery businessQuery) {
         Map<Object,Object> map = new HashMap<>();
         String []token1 = businessQuery.getToken().split("\\.");
-        String str = token1[2];
-        String key = businessQuery.getDeviceOpenId()+str;
-        businessQueryRedisTemplate.opsForValue().set(key,businessQuery);
+        String str = null;
+        str = token1[token1.length-1];
+        String key = businessQuery.getDeviceOpenId()+":"+str;
+        long time =300;
+        businessQueryRedisTemplate.opsForValue().set(key,businessQuery,time,TimeUnit.SECONDS);
+
         BusinessQuery b1 = businessQueryRedisTemplate.opsForValue().get(key);
         if(b1==null){
             map.put("code","9999");
