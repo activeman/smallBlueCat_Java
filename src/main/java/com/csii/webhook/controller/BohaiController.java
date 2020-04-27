@@ -12,6 +12,8 @@ import com.csii.webhook.model.pojo.SlotEntity;
 import com.csii.webhook.service.CommunictionService;
 import com.csii.webhook.service.TestService;
 import com.csii.webhook.service.UsersService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -29,6 +31,7 @@ import java.util.Map;
 @Controller
 @ResponseBody
 public class BohaiController {
+    private Logger logger = LoggerFactory.getLogger(BohaiController.class);
     @Autowired
     UsersService usersService;
     @Autowired
