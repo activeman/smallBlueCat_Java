@@ -48,17 +48,19 @@ public class AuthController {
      */
     @RequestMapping("/login.do")
     public String login(String login, String password, String url, String state, Model model) {
-        if (loginService.login(login, password)){
+        if (loginService.login(login, password)) {
             String token = authService.sign("csii");
             return "redirect:" + url + "&code=" + token + "&state=" + state;
-        }else {
-            model.addAttribute("url",url);
-            model.addAttribute("state",state);
+        } else {
+            model.addAttribute("url", url);
+            model.addAttribute("state", state);
             return "login";
         }
     }
 
-
+    /**
+     * 发布token
+     */
     @RequestMapping("/consent.do")
     @ResponseBody
     public Map<String, Object> consent(HttpServletRequest request) {
