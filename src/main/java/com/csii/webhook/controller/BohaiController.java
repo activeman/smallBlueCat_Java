@@ -1,10 +1,16 @@
 package com.csii.webhook.controller;
 
 import com.alibaba.da.coin.ide.spi.standard.ResultModel;
-import com.alibaba.da.coin.ide.spi.standard.TaskQuery;
+
+
+import com.csii.webhook.model.pojo.TaskQuery;
 import com.alibaba.da.coin.ide.spi.standard.TaskResult;
-import com.alibaba.da.coin.ide.spi.trans.MetaFormat;
+
+import com.csii.webhook.model.pojo.BusinessQuery;
+import com.csii.webhook.model.pojo.MetaFormat;
+import com.csii.webhook.model.pojo.SlotEntity;
 import com.csii.webhook.service.CommunictionService;
+import com.csii.webhook.service.TestService;
 import com.csii.webhook.service.UsersService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -14,6 +20,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -24,11 +31,14 @@ import java.util.Map;
 public class BohaiController {
     @Autowired
     UsersService usersService;
+    @Autowired
     CommunictionService communictionService;
+    @Autowired
+    TestService testService;
     /**
      * Test
      */
-    @RequestMapping(value = "/helloxx", method = RequestMethod.POST)
+    @RequestMapping(value = "/helloxx.do", method = RequestMethod.POST)
     public ResultModel<TaskResult> getResponse(@RequestBody String taskQuery) {
         //将开发者平台识别到的语义理解的结果（json字符串格式）转换成TaskQuery
         TaskQuery query = MetaFormat.parseToQuery(taskQuery);
@@ -39,7 +49,7 @@ public class BohaiController {
         return communictionService.responseTaskResult("请输入一句话");//RESULT
     }
 
-    @RequestMapping("/c")
+    @RequestMapping("/c.do")
     public Map<String, Object> consent(String code) {
         System.out.println("---consent---");
         System.out.println("code:\t"+code);
@@ -51,7 +61,7 @@ public class BohaiController {
     /**
      * 存款产品
      */
-    @RequestMapping(value = "/deposit", method = RequestMethod.POST)
+    @RequestMapping(value = "/deposit.do", method = RequestMethod.POST)
     public ResultModel<TaskResult> depositController(@RequestBody String taskQuery) {
 
         //进入前判断token 和openid信息，到这里已经确认没问题了
@@ -63,9 +73,27 @@ public class BohaiController {
         communictionService.printObject(query);
 
         //向redis里存意图标签。key：openid:token:"intent" , value: "deposit"
+        BusinessQuery businessQuery = null;
+//        businessQuery.setId(query.getSessionId());
+        businessQuery.setToken(query.getToken());
+        businessQuery.setSessionId(query.getSessionId());
+        businessQuery.setUtterance(query.getUtterance());
+        businessQuery.setDeviceOpenId(query.getUtterance());
+//        根据SlotEntities IntentParameterName为key
+        //  Map<String, SlotEntity> map =query.getSlotEntities().stream().collect(Collectors.toMap(SlotEntity::getIntentParameterName, Function.identity(), (key1, key2) -> key2));
+        Map<String,SlotEntity> map = new HashMap<>();
+        List<SlotEntity> list = query.getSlotEntities();
+        for (SlotEntity key: list) {
+            map.put(key.getIntentParameterName(),key);
+        }
+        businessQuery.setSlotEntities(map);
+//        private String Id, Token, SessionId, Utterance, DeviceOpenId;//全部继承TaskQuery信息//每一次请求都要验证token
+//        private String BusinessIntent;//业务意图，非TaskQuery意图
+//        private Map<String, SlotEntity> SlotEntities;//从TaskQuery信息处理后的得到
 
+//        testService.saveBusinessQuery()
         // 调用depositService方法，传入taskQuery，return TaskResult
-
+//        bohaiService.depositService(query);
         // 以下全在 depositService中处理
 
         //从redis里取出BusinessQueryString
@@ -100,7 +128,7 @@ public class BohaiController {
     /**
      * 兜底fallback
      */
-    @RequestMapping(value = "/fallback", method = RequestMethod.POST)
+    @RequestMapping(value = "/fallback.do", method = RequestMethod.POST)
     public ResultModel<TaskResult> fallbackController(@RequestBody String taskQuery) {
         //进入前判断token 和openid信息，到这里已经确认没问题了
 

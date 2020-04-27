@@ -34,7 +34,7 @@ public class RedisListenerConfig implements ServletContextListener {
         reslut =  SessionFilter.getRedisResult(url,port,password);
         Map<String,Object> map =new HashMap<>();
 
-        if (reslut==false){
+        if (!reslut){
             logger.debug("========================项目连接redis服务异常========================");
         }
     }
